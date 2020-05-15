@@ -1,4 +1,4 @@
-package com.github.cc3002.citricjuice.model.board;
+package java.com.github.cc3002.citricjuice.model.board;
 
 /**
  * Enum for the types of panels of the game.
