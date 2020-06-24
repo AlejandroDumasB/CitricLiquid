@@ -8,7 +8,7 @@ class PanelNeutralTest extends AbstractTestPanel {
 
     @Override
     public void setTestPanel() {
-        testPanel = new PanelNeutral();
+        testPanel = new PanelNeutral(0);
         expectedPanelType = PanelType.NEUTRAL;
     }
 

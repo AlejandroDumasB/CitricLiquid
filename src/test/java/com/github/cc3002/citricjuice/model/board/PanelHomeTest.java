@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class PanelHomeTest extends AbstractTestPanel {
 
     public void setTestPanel() {
-        testPanel = new PanelHome();
+        testPanel = new PanelHome(0);
         expectedPanelType = PanelType.HOME;
     }
 

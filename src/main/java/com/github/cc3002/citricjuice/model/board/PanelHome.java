@@ -7,8 +7,8 @@ public class PanelHome extends AbstractPanel {
     /**
      * Creates a home panel.
      */
-    public PanelHome(){
-        super(PanelType.HOME);
+    public PanelHome(int id){
+        super(PanelType.HOME, id);
     }
 
     /**

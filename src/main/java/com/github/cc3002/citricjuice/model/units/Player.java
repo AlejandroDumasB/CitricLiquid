@@ -1,9 +1,14 @@
 package java.com.github.cc3002.citricjuice.model.units;
 
+import java.com.github.cc3002.citricjuice.model.NormaGoal;
+import java.com.github.cc3002.citricjuice.model.board.IPanel;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Player extends AbstractUnit{
+    private int home_id;
+    private NormaGoal normaGoal = NormaGoal.STARS;
+    private int timeInRecovery = 0;
 
     /**
      * Constructor for a PLayer unit.
@@ -67,10 +72,6 @@ public class Player extends AbstractUnit{
             List<Integer> data = enemy.defeatedByPlayer();
             increaseStarsBy(data.get(0));
             increaseWinsBy(data.get(1));
-            enemy.recoveryPhase();
-        }
-        if(currentHP == 0){
-            recoveryPhase();
         }
     }
 
@@ -136,8 +137,30 @@ public class Player extends AbstractUnit{
      * Defines the state of the player after get K.O.
      * Not implement yet.
      */
-    @Override
-    public void recoveryPhase() {
-        //nothing for now
+    public boolean recovery() {
+        int dice = roll();
+        if(dice > 5 - timeInRecovery){
+            timeInRecovery = 0;
+            return false;
+        } else {
+            timeInRecovery++;
+            return true;
+        }
+    }
+
+    public void setHome(IPanel home){
+        this.home_id = home.getId();
+    }
+
+    public int getHome_id(){
+        return home_id;
+    }
+
+    public void setNormaGoal(NormaGoal normaGoal){
+        this.normaGoal = normaGoal;
+    }
+
+    public NormaGoal getNormaGoal(){
+        return normaGoal;
     }
 }

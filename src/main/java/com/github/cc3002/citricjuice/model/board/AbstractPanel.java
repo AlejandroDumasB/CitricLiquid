@@ -2,8 +2,12 @@ package java.com.github.cc3002.citricjuice.model.board;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.com.github.cc3002.citricjuice.model.units.Boss;
+import java.com.github.cc3002.citricjuice.model.units.IUnit;
 import java.com.github.cc3002.citricjuice.model.units.Player;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -14,12 +18,19 @@ public abstract class AbstractPanel implements IPanel {
 
     private final Set<IPanel> nextPanels = new HashSet<>();
     private final PanelType type;
+    private final int id;
+    private List<Player> players = new ArrayList<>();
 
     /**
      * Creates a default panel.
+     * @param type
+     *     feature that define panel's type.
+     * @param id
+     *     feature that identifies the panel.
      */
-    public AbstractPanel(PanelType type){
+    public AbstractPanel(PanelType type, int id){
         this.type = type;
+        this.id = id;
     }
 
     /**
@@ -66,4 +77,35 @@ public abstract class AbstractPanel implements IPanel {
     public void addNextPanel(final IPanel panel) {
         nextPanels.add(panel);
     }
+
+    /**
+     * Returns the id number of the panel.
+     */
+    @Override
+    public int getId() {
+        return id;
+    }
+
+    @Override
+    public List<Player> getPlayers(){
+        return players;
+    }
+
+    @Override
+    public void setPlayer(final Player player){
+        players.add(player);
+    }
+
+    @Override
+    public void popPlayer(final Player player){
+        players.remove(player);
+    }
+
+    @Override
+    public boolean search(final Player player){
+        return players.contains(player);
+    }
+
+    @Override
+    public IUnit getEnemy(int i){return null;}
 }

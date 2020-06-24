@@ -7,8 +7,8 @@ public class PanelNeutral extends AbstractPanel {
     /**
      * Creates a neutral panel.
      */
-    public PanelNeutral(){
-        super(PanelType.NEUTRAL);
+    public PanelNeutral(int id){
+        super(PanelType.NEUTRAL, id);
     }
 
     /**

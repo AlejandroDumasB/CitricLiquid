@@ -7,8 +7,8 @@ public class PanelBonus extends AbstractPanel {
     /**
      * Creates a bonus panel.
      */
-    public PanelBonus(){
-        super(PanelType.BONUS);
+    public PanelBonus(int id){
+        super(PanelType.BONUS, id);
     }
 
     /**

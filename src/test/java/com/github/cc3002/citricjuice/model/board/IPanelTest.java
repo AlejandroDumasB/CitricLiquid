@@ -25,4 +25,9 @@ public interface IPanelTest {
     @Test
     void neutralPanelTest();
 
+    @Test
+    void searchTest();
+
+    @Test
+    void setAndGetPlayersTest();
 }
