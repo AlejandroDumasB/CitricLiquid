@@ -19,7 +19,7 @@ public class GameController {
     private boolean isTooCrowded = false;
 
     public GameController(){
-        this.chapter = 0;
+        this.chapter = 1;
         this.winner = null;
     }
 

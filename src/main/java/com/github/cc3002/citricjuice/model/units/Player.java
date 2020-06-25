@@ -135,7 +135,6 @@ public class Player extends AbstractUnit{
 
     /**
      * Defines the state of the player after get K.O.
-     * Not implement yet.
      */
     public boolean recovery() {
         int dice = roll();

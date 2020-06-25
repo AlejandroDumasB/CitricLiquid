@@ -2,14 +2,12 @@ package java.com.github.cc3002.citricjuice.controller;
 
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.RepeatedTest;
 
 import java.com.github.cc3002.citricjuice.model.NormaGoal;
 import java.com.github.cc3002.citricjuice.model.board.IPanel;
 import java.com.github.cc3002.citricjuice.model.units.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -23,10 +21,10 @@ public class GameControllerTest {
         IPanel homePanel2 = gameController.createHomePanel(1);
         IPanel homePanel3 = gameController.createHomePanel(2);
         IPanel homePanel4 = gameController.createHomePanel(3);
-        Player player1 = gameController.createPlayer("Player1", 100, 1, 1, 1, homePanel1);
-        Player player2 = gameController.createPlayer("Player2", 100, 1, 1, 1, homePanel2);
-        Player player3 = gameController.createPlayer("Player3", 100, 1, 1, 1, homePanel3);
-        Player player4 = gameController.createPlayer("Player4", 100, 1, 1, 1, homePanel4);
+        gameController.createPlayer("Player1", 100, 1, 1, 1, homePanel1);
+        gameController.createPlayer("Player2", 100, 1, 1, 1, homePanel2);
+        gameController.createPlayer("Player3", 100, 1, 1, 1, homePanel3);
+        gameController.createPlayer("Player4", 100, 1, 1, 1, homePanel4);
         gameController.setCurrentPlayer(gameController.getPlayers().get(0));
         IPanel bossPanel = gameController.createBossPanel(4);
         IPanel wildPanel = gameController.createEncounterPanel(5);
@@ -114,5 +112,18 @@ public class GameControllerTest {
     public void setPlayerNormaGoalTest(){
         gameController.setCurrPlayerNormaGoal(NormaGoal.WINS);
         assertEquals(NormaGoal.WINS, gameController.getTurnOwner().getNormaGoal());
+    }
+
+    @Test
+    public void turnTest(){
+        gameController.initPhase();
+        assertEquals(gameController.getPlayers().get(1), gameController.getTurnOwner());
+        gameController.initPhase();
+        assertEquals(gameController.getPlayers().get(2), gameController.getTurnOwner());
+        gameController.initPhase();
+        assertEquals(gameController.getPlayers().get(3), gameController.getTurnOwner());
+        gameController.initPhase();
+        assertEquals(gameController.getPlayers().get(0), gameController.getTurnOwner());
+        assertEquals(2, gameController.getChapter());
     }
 }
