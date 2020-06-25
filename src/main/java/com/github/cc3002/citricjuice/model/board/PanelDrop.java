@@ -7,8 +7,8 @@ public class PanelDrop extends AbstractPanel {
     /**
      * Creates a drop panel.
      */
-    public PanelDrop(){
-        super(PanelType.DROP);
+    public PanelDrop(int id){
+        super(PanelType.DROP, id);
     }
 
     /**

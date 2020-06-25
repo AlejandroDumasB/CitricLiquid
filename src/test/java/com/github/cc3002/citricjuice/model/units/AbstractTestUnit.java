@@ -10,10 +10,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public abstract class AbstractTestUnit implements IUnitTest{
 
-    protected IUnit playerTest1;
-    protected IUnit playerTest2;
-    protected IUnit wildUnitTest;
-    protected IUnit bossUnitTest;
+    protected Player playerTest1;
+    protected Player playerTest2;
+    protected Wild wildUnitTest;
+    protected Boss bossUnitTest;
 
     @BeforeEach
     public void setUp(){

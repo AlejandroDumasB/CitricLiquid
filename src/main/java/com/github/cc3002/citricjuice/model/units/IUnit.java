@@ -1,5 +1,6 @@
 package java.com.github.cc3002.citricjuice.model.units;
 
+import java.com.github.cc3002.citricjuice.model.board.IPanel;
 import java.util.List;
 
 /**
@@ -60,6 +61,4 @@ public interface IUnit {
     List<Integer> defeatedByPlayer();
 
     List<Integer> defeatedByWild();
-
-    void recoveryPhase();
 }

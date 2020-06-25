@@ -4,11 +4,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.com.github.cc3002.citricjuice.model.units.Player;
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public abstract class AbstractTestPanel implements IPanelTest{
 
@@ -32,15 +34,18 @@ public abstract class AbstractTestPanel implements IPanelTest{
     public abstract void setTestPanel();
 
     @Test
+    @Override
     public void typePanelTest(){
         assertEquals(expectedPanelType, testPanel.getType());
     }
 
     @Test
+    @Override
     public void nextPanelTest() {
+        testPanel = new PanelNeutral(0);
         assertTrue(testPanel.getNextPanels().isEmpty());
-        final var expectedPanel1 = new PanelNeutral();
-        final var expectedPanel2 = new PanelNeutral();
+        final var expectedPanel1 = new PanelNeutral(1);
+        final var expectedPanel2 = new PanelNeutral(2);
 
         testPanel.addNextPanel(expectedPanel1);
         assertEquals(1, testPanel.getNextPanels().size());
@@ -53,5 +58,30 @@ public abstract class AbstractTestPanel implements IPanelTest{
 
         assertEquals(Set.of(expectedPanel1, expectedPanel2),
                 testPanel.getNextPanels());
+    }
+
+    @Test
+    public void setAndGetPlayersTest(){
+        testPanel = new PanelHome(0);
+        assertEquals(0, testPanel.getId());
+        Player playerTest = new Player("test", 10, 1, 1, 1);
+        testPanel.setPlayer(playerTest);
+        assertEquals(List.of(playerTest), testPanel.getPlayers());
+        testPanel.setPlayer(suguri);
+        assertEquals(List.of(playerTest, suguri), testPanel.getPlayers());
+        testPanel.popPlayer(playerTest);
+        assertEquals(List.of(suguri), testPanel.getPlayers());
+    }
+
+    @Test
+    @Override
+    public void searchTest(){
+        testPanel = new PanelHome(0);
+        Player playerTest = new Player("test", 10, 1, 1, 1);
+        testPanel.setPlayer(playerTest);
+        assertTrue(testPanel.search(playerTest));
+        assertFalse(testPanel.search(suguri));
+        testPanel.setPlayer(suguri);
+        assertTrue(testPanel.search(suguri));
     }
 }

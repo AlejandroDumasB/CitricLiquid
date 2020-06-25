@@ -9,7 +9,7 @@ class PanelDropTest extends AbstractTestPanel {
 
     @Override
     public void setTestPanel() {
-        testPanel = new PanelDrop();
+        testPanel = new PanelDrop(0);
         expectedPanelType = PanelType.DROP;
     }
 

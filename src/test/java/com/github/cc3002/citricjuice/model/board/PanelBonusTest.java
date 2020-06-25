@@ -9,7 +9,7 @@ class PanelBonusTest extends AbstractTestPanel{
 
     @Override
     public void setTestPanel(){
-        testPanel = new PanelBonus();
+        testPanel = new PanelBonus(0);
         expectedPanelType = PanelType.BONUS;
     }
 
