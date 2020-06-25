@@ -2,6 +2,8 @@ package java.com.github.cc3002.citricjuice.model.board;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.com.github.cc3002.citricjuice.model.units.Boss;
 import java.com.github.cc3002.citricjuice.model.units.IUnit;
 import java.com.github.cc3002.citricjuice.model.units.Player;
@@ -20,6 +22,7 @@ public abstract class AbstractPanel implements IPanel {
     private final PanelType type;
     private final int id;
     private List<Player> players = new ArrayList<>();
+    private PropertyChangeSupport tooCrowdedNotification = new PropertyChangeSupport(this);
 
     /**
      * Creates a default panel.
@@ -86,21 +89,37 @@ public abstract class AbstractPanel implements IPanel {
         return id;
     }
 
+    /**
+     * Returns a list of all the players on the panel.
+     */
     @Override
     public List<Player> getPlayers(){
         return players;
     }
 
+    /**
+     * Sets a player on the panel. Notify to the listeners if the panel correspond to
+     * the player's homePanel or if it's another player in the same spot.
+     */
     @Override
     public void setPlayer(final Player player){
         players.add(player);
+        if (players.size() > 1 || player.getHome_id() == getId()){
+            notifyAll();
+        }
     }
 
+    /**
+     * Remove a player from the list of players (usually, because the player move out)
+     */
     @Override
     public void popPlayer(final Player player){
         players.remove(player);
     }
 
+    /**
+     * Returns if the player is located in this panel.
+     */
     @Override
     public boolean search(final Player player){
         return players.contains(player);
@@ -108,4 +127,12 @@ public abstract class AbstractPanel implements IPanel {
 
     @Override
     public IUnit getEnemy(int i){return null;}
+
+    /**
+     * Method needed to notify the listeners using Observer Pattern.
+     */
+    @Override
+    public void addTooCrowdedListener(PropertyChangeListener listener){
+        tooCrowdedNotification.addPropertyChangeListener(listener);
+    }
 }

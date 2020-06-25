@@ -13,8 +13,23 @@ public class GameController {
     private final List<IPanel> panels = new ArrayList<>();
     private final List<Player> players = new ArrayList<>();
     private Player currentPlayer;
-    private Player winner = null;
+    private Player winner;
     private int chapter;
+    private TooCrowdedSpot tooCrowded = new TooCrowdedSpot(this);
+    private boolean isTooCrowded = false;
+
+    public GameController(){
+        this.chapter = 0;
+        this.winner = null;
+    }
+
+    /**
+     * Method used to identify if there is two players in the same panel, or if
+     * the a player finds its own homePanel.
+     */
+    public void spotTooCrowded(){
+        isTooCrowded = true;
+    }
 
     /**
     * Create a BonusPanel with the correspondent id tag
@@ -22,6 +37,7 @@ public class GameController {
      */
     public IPanel createBonusPanel(int id) {
         IPanel panel = new PanelBonus(id);
+        panel.addTooCrowdedListener(tooCrowded);
         panels.add(panel);
         return panel;
     }
@@ -32,6 +48,7 @@ public class GameController {
      */
     public IPanel createBossPanel(int id) {
         IPanel panel = new PanelBoss(id);
+        panel.addTooCrowdedListener(tooCrowded);
         panels.add(panel);
         return panel;
     }
@@ -42,6 +59,7 @@ public class GameController {
      */
     public IPanel createDropPanel(int id) {
         IPanel panel = new PanelDrop(id);
+        panel.addTooCrowdedListener(tooCrowded);
         panels.add(panel);
         return panel;
     }
@@ -52,6 +70,7 @@ public class GameController {
      */
     public IPanel createEncounterPanel(int id) {
         IPanel panel = new PanelEncounter(id);
+        panel.addTooCrowdedListener(tooCrowded);
         panels.add(panel);
         return panel;
     }
@@ -62,6 +81,7 @@ public class GameController {
      */
     public IPanel createHomePanel(int id) {
         IPanel panel = new PanelHome(id);
+        panel.addTooCrowdedListener(tooCrowded);
         panels.add(panel);
         return panel;
     }
@@ -72,6 +92,7 @@ public class GameController {
      */
     public IPanel createNeutralPanel(int id) {
         IPanel panel = new PanelNeutral(id);
+        panel.addTooCrowdedListener(tooCrowded);
         panels.add(panel);
         return panel;
     }
@@ -153,10 +174,20 @@ public class GameController {
     /**
      * The player move through the adjacent panels, and choose the way if
      * it gets to a panel with more than one path.
+     * If the current player finds another player, or its own homePanel, then decides
+     * if it wants to continue or not.
      */
     public void moveNextPanel(Player player, int counter){
         if (counter == 0){
             mainPhase();
+        } else if (isTooCrowded){
+            int decision = decisionPhase();
+            isTooCrowded = false;
+            if(decision == 0){
+                moveNextPanel(player, counter);
+            } else {
+                mainPhase();
+            }
         } else {
             IPanel currentPanel = getPlayerPanel(player);
             List<IPanel> nextPanels = List.copyOf(currentPanel.getNextPanels());

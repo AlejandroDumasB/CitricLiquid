@@ -1,5 +1,6 @@
 package java.com.github.cc3002.citricjuice.model.board;
 
+import java.beans.PropertyChangeListener;
 import java.com.github.cc3002.citricjuice.model.units.Boss;
 import java.com.github.cc3002.citricjuice.model.units.IUnit;
 import java.com.github.cc3002.citricjuice.model.units.Player;
@@ -40,4 +41,6 @@ public interface IPanel{
     boolean search(Player unit);
 
     IUnit getEnemy(int i);
+
+    void addTooCrowdedListener(PropertyChangeListener listener);
 }
