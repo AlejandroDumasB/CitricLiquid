@@ -205,6 +205,9 @@ public class CitricLiquidFX extends Application {
             public void handle(final long now) {
                 chapterLabel.setText("CHAPTER = "+ gameController.getChapter());
                 state.setText(gameController.getState());
+                if(gameController.getWinner().size()>0){
+                    setWinner();
+                }
                 try {
                     setEnemy();
                 } catch (FileNotFoundException e) {
@@ -281,5 +284,9 @@ public class CitricLiquidFX extends Application {
         } else {
             gameController.defendAttack();
         }
+    }
+
+    public void setWinner(){
+        state.setText("THE WINNER IS: " + gameController.getWinner().get(0).getName());
     }
 }

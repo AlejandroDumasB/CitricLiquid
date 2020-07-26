@@ -13,7 +13,7 @@ public class GameController {
     private final List<IPanel> panels = new ArrayList<>();
     private final List<Player> players = new ArrayList<>();
     private Player currentPlayer;
-    private Player winner;
+    private List<Player> winner = new ArrayList<>();
     private int chapter;
     private TooCrowdedSpot tooCrowded = new TooCrowdedSpot(this);
     private boolean isTooCrowded = false;
@@ -250,7 +250,7 @@ public class GameController {
                 currentPlayer.normaClear();
                 state = "Choose NormaGoal";
                 if (currentPlayer.getNormaLevel() > 5){
-                    winner = currentPlayer;
+                    winner.add(currentPlayer);
 
                 }
             } else {
@@ -466,7 +466,7 @@ public class GameController {
     /**
      * Return the winner of the game. If no player win already, return null.
      */
-    public Player getWinner(){
+    public List<Player> getWinner(){
         return winner;
     }
 
@@ -495,10 +495,10 @@ public class GameController {
         IPanel homePanel1 = createHomePanel(1);
         IPanel homePanel2 = createHomePanel(2);
         IPanel homePanel3 = createHomePanel(3);
-        createPlayer("Player1", 2, 1, 1, 1, homePanel0);
-        createPlayer("Player2", 2, 1, 1, 1, homePanel1);
-        createPlayer("Player3", 2, 1, 1, 1, homePanel2);
-        createPlayer("Player4", 2, 1, 1, 1, homePanel3);
+        createPlayer("Player1", 5, 2, 1, 1, homePanel0);
+        createPlayer("Player2", 5, 2, 1, 1, homePanel1);
+        createPlayer("Player3", 5, 2, 1, 1, homePanel2);
+        createPlayer("Player4", 5, 2, 1, 1, homePanel3);
         currentPlayer = players.get(0);
         IPanel neutralPanel4 = createNeutralPanel(4);
         IPanel neutralPanel5 = createNeutralPanel(5);
