@@ -25,11 +25,19 @@ Trate de corregir con las indicaciones que se me entregaron para la tarea1, perm
 
 La Interfaz Grafica CitricLiquidFX se encuentra en el mismo directorio que contenia HelloWorldJavaFX.
 La escena de la interfaz muestra un mapa simple, con cuatro jugadores (sus estadisticas en la zona derecha), y los botones de interaccion con el usuario se ubican en la parte superior. Los botones no funcionan en cualquier momento, y para indicar que botones se pueden oprimir se ubica en la ezquina superior derecha un mensaje que va cambiando dependiendo del estado del juego.
+
 Existen 6 tipos de paneles distintos:
+
 Amarillos - Paneles Neutrales
+
 Verde - Paneles Home de los jugadores
+
 Rojo - Paneles de encuentro con enemigos aleatorios (Los paneles con una corona son los Bosses)
+
 Marron - Paneles Drop
+
 Azul - Paneles Bonus
+
 Para un juego mas fluido (y una implementacion mas sencilla), se lanza el dado al iniciar el movimiento de cada jugador, pero cuando se cae sobre una casilla especial, se lanza un dado internamente que activa el efecto de el panel. Lo observado en pantalla es el resultado de esa interaccion, viendose modificadas las estadisticas de los jugadores a la derecha.
-la interaccion del usuario se limita entonces a lanzar el dado al inicio de cada turno, escoger por donde avanzar al llegar a una bifurcacion en el mapa, escoger si esquivar o defenderse de un ataque enemigo (tanto de otros jugadores como de personajes no jugables), escoger si combatir contra otro jugador si se cruzan en algun momento, decidir si detenerse cuando pasan por su panel Home y elegir cual será el proximo NormaGoal luego de alcanzar un nuevo nivel de Norma.
+
+La interaccion del usuario se limita entonces a lanzar el dado al inicio de cada turno, escoger por donde avanzar al llegar a una bifurcacion en el mapa, escoger si esquivar o defenderse de un ataque enemigo (tanto de otros jugadores como de personajes no jugables), escoger si combatir contra otro jugador si se cruzan en algun momento, decidir si detenerse cuando pasan por su panel Home y elegir cual será el proximo NormaGoal luego de alcanzar un nuevo nivel de Norma.
