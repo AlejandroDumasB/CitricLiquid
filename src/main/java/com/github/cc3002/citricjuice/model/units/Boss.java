@@ -1,4 +1,4 @@
-package java.com.github.cc3002.citricjuice.model.units;
+package com.github.cc3002.citricjuice.model.units;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +21,25 @@ public class Boss extends Enemy{
      */
     public Boss(final String name, final int maxHP, final int atk, final int def, final int evd) {
         super(name, maxHP, atk, def, evd);
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Boss)) {
+            return false;
+        }
+        final IUnit player = (Boss) o;
+        return getMaxHP() == player.getMaxHP() &&
+                getAtk() == player.getAtk() &&
+                getDef() == player.getDef() &&
+                getEvd() == player.getEvd() &&
+                getNormaLevel() == player.getNormaLevel() &&
+                getStars() == player.getStars() &&
+                getCurrentHP() == player.getCurrentHP() &&
+                getName().equals(player.getName());
     }
 
     /**

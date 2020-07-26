@@ -1,4 +1,4 @@
-package java.com.github.cc3002.citricjuice.model;
+package com.github.cc3002.citricjuice.model;
 
 /**
  * Enumeration representing the possible types of goals to level up a norma.

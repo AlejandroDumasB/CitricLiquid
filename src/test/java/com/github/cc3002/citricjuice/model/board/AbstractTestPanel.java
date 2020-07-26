@@ -1,9 +1,9 @@
-package java.com.github.cc3002.citricjuice.model.board;
+package com.github.cc3002.citricjuice.model.board;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.com.github.cc3002.citricjuice.model.units.Player;
+import com.github.cc3002.citricjuice.model.units.Player;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -22,6 +22,7 @@ public abstract class AbstractTestPanel implements IPanelTest{
     protected Player suguri;
     protected long testSeed;
     protected IPanel testPanel;
+    protected IPanel testAbsPanel;
     protected PanelType expectedPanelType;
 
     @BeforeEach
@@ -42,7 +43,6 @@ public abstract class AbstractTestPanel implements IPanelTest{
     @Test
     @Override
     public void nextPanelTest() {
-        testPanel = new PanelNeutral(0);
         assertTrue(testPanel.getNextPanels().isEmpty());
         final var expectedPanel1 = new PanelNeutral(1);
         final var expectedPanel2 = new PanelNeutral(2);
@@ -62,7 +62,6 @@ public abstract class AbstractTestPanel implements IPanelTest{
 
     @Test
     public void setAndGetPlayersTest(){
-        testPanel = new PanelHome(0);
         assertEquals(0, testPanel.getId());
         Player playerTest = new Player("test", 10, 1, 1, 1);
         testPanel.setPlayer(playerTest);
@@ -76,7 +75,6 @@ public abstract class AbstractTestPanel implements IPanelTest{
     @Test
     @Override
     public void searchTest(){
-        testPanel = new PanelHome(0);
         Player playerTest = new Player("test", 10, 1, 1, 1);
         testPanel.setPlayer(playerTest);
         assertTrue(testPanel.search(playerTest));

@@ -1,8 +1,10 @@
-package java.com.github.cc3002.citricjuice.model.board;
+package com.github.cc3002.citricjuice.model.board;
 
-import java.com.github.cc3002.citricjuice.model.units.Boss;
-import java.com.github.cc3002.citricjuice.model.units.IUnit;
-import java.com.github.cc3002.citricjuice.model.units.Player;
+import com.github.cc3002.citricjuice.model.units.Boss;
+import com.github.cc3002.citricjuice.model.units.IUnit;
+import com.github.cc3002.citricjuice.model.units.Player;
+
+import java.util.List;
 
 public class PanelBoss extends AbstractPanel{
     private final Boss boss1 = new Boss("Storage Manager", 8, 3, 2, -1);
@@ -21,14 +23,38 @@ public class PanelBoss extends AbstractPanel{
     public void activatedBy(Player player) {
         int choose = player.roll();
         if (choose < 3) {
-            player.attack(boss1);
-            boss1.setCurrentHP(boss1.getMaxHP());
+            boss1.receiveAttack(player.attackDamage());
+            if (boss1.getCurrentHP()>0){
+                enemyAlive = boss1;
+                boss1.increaseStarsBy(5);
+            } else {
+                List<Integer> data = boss1.defeatedByPlayer();
+                player.increaseStarsBy(data.get(0));
+                player.increaseWinsBy(data.get(1));
+                boss1.setCurrentHP(boss1.getMaxHP());
+            }
         } else if (choose > 4) {
-            player.attack(boss3);
-            boss3.setCurrentHP(boss3.getMaxHP());
+            boss3.receiveAttack(player.attackDamage());
+            if (boss3.getCurrentHP()>0){
+                enemyAlive = boss3;
+                boss3.increaseStarsBy(5);
+            } else {
+                List<Integer> data = boss3.defeatedByPlayer();
+                player.increaseStarsBy(data.get(0));
+                player.increaseWinsBy(data.get(1));
+                boss3.setCurrentHP(boss3.getMaxHP());
+            }
         } else {
-            player.attack(boss2);
-            boss2.setCurrentHP(boss2.getMaxHP());
+            boss2.receiveAttack(player.attackDamage());
+            if (boss2.getCurrentHP()>0){
+                enemyAlive = boss2;
+                boss2.increaseStarsBy(5);
+            } else {
+                List<Integer> data = boss2.defeatedByPlayer();
+                player.increaseStarsBy(data.get(0));
+                player.increaseWinsBy(data.get(1));
+                boss2.setCurrentHP(boss2.getMaxHP());
+            }
         }
     }
 

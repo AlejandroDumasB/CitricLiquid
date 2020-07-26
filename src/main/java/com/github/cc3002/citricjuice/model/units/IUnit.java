@@ -1,6 +1,6 @@
-package java.com.github.cc3002.citricjuice.model.units;
+package com.github.cc3002.citricjuice.model.units;
 
-import java.com.github.cc3002.citricjuice.model.board.IPanel;
+import com.github.cc3002.citricjuice.model.board.IPanel;
 import java.util.List;
 
 /**

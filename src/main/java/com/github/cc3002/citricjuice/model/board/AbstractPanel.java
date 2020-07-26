@@ -1,12 +1,11 @@
-package java.com.github.cc3002.citricjuice.model.board;
+package com.github.cc3002.citricjuice.model.board;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.com.github.cc3002.citricjuice.model.units.Boss;
-import java.com.github.cc3002.citricjuice.model.units.IUnit;
-import java.com.github.cc3002.citricjuice.model.units.Player;
+import com.github.cc3002.citricjuice.model.units.IUnit;
+import com.github.cc3002.citricjuice.model.units.Player;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -21,8 +20,9 @@ public abstract class AbstractPanel implements IPanel {
     private final Set<IPanel> nextPanels = new HashSet<>();
     private final PanelType type;
     private final int id;
-    private List<Player> players = new ArrayList<>();
+    private final List<Player> players = new ArrayList<>();
     private PropertyChangeSupport tooCrowdedNotification = new PropertyChangeSupport(this);
+    protected IUnit enemyAlive = null;
 
     /**
      * Creates a default panel.
@@ -104,9 +104,10 @@ public abstract class AbstractPanel implements IPanel {
     @Override
     public void setPlayer(final Player player){
         players.add(player);
-        if (players.size() > 1 || player.getHome_id() == getId()){
-            notifyAll();
+        if (players.size() > 1){
+            tooCrowdedNotification.firePropertyChange("TooCrowded",1,2);
         }
+
     }
 
     /**
@@ -134,5 +135,15 @@ public abstract class AbstractPanel implements IPanel {
     @Override
     public void addTooCrowdedListener(PropertyChangeListener listener){
         tooCrowdedNotification.addPropertyChangeListener(listener);
+    }
+
+    @Override
+    public void setEnemyAlive(IUnit enemyAlive) {
+        this.enemyAlive = enemyAlive;
+    }
+
+    @Override
+    public IUnit getEnemyAlive() {
+        return enemyAlive;
     }
 }

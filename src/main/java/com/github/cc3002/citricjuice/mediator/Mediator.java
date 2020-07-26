@@ -1,17 +1,17 @@
-package java.com.github.cc3002.citricjuice.mediator;
+package com.github.cc3002.citricjuice.mediator;
 
-import java.com.github.cc3002.citricjuice.controller.GameController;
-import java.com.github.cc3002.citricjuice.model.NormaGoal;
+import com.github.cc3002.citricjuice.controller.GameController;
+import com.github.cc3002.citricjuice.model.NormaGoal;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.com.github.cc3002.citricjuice.model.board.IPanel;
-import java.com.github.cc3002.citricjuice.model.board.PanelHome;
-import java.com.github.cc3002.citricjuice.model.units.Boss;
-import java.com.github.cc3002.citricjuice.model.units.IUnit;
-import java.com.github.cc3002.citricjuice.model.units.Player;
-import java.com.github.cc3002.citricjuice.model.units.Wild;
+import com.github.cc3002.citricjuice.model.board.IPanel;
+import com.github.cc3002.citricjuice.model.board.PanelHome;
+import com.github.cc3002.citricjuice.model.units.Boss;
+import com.github.cc3002.citricjuice.model.units.IUnit;
+import com.github.cc3002.citricjuice.model.units.Player;
+import com.github.cc3002.citricjuice.model.units.Wild;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
