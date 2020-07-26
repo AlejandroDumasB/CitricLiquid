@@ -1,6 +1,10 @@
-package java.com.github.cc3002.citricjuice.model.board;
+package com.github.cc3002.citricjuice.model.board;
 
+import com.github.cc3002.citricjuice.model.units.Player;
 import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.Test;
+
+import java.util.List;
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -28,6 +32,24 @@ class PanelBonusTest extends AbstractTestPanel{
                     "Test failed with seed: " + testSeed);
             suguri.normaClear();
         }
+    }
+
+    @Override
+    @Test
+    public void setAndGetPlayersTest() {
+        super.setAndGetPlayersTest();
+    }
+
+    @Test
+    @Override
+    public void searchTest(){
+        super.searchTest();
+    }
+
+    @Test
+    @Override
+    public void nextPanelTest(){
+        super.nextPanelTest();
     }
 
     @Override

@@ -1,6 +1,8 @@
-package java.com.github.cc3002.citricjuice.model.board;
+package com.github.cc3002.citricjuice.model.board;
 
 import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.Test;
+
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -11,6 +13,24 @@ class PanelDropTest extends AbstractTestPanel {
     public void setTestPanel() {
         testPanel = new PanelDrop(0);
         expectedPanelType = PanelType.DROP;
+    }
+
+    @Override
+    @Test
+    public void setAndGetPlayersTest() {
+        super.setAndGetPlayersTest();
+    }
+
+    @Test
+    @Override
+    public void searchTest(){
+        super.searchTest();
+    }
+
+    @Test
+    @Override
+    public void nextPanelTest(){
+        super.nextPanelTest();
     }
 
     @Override

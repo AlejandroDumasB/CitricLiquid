@@ -1,4 +1,4 @@
-package java.com.github.cc3002.citricjuice.model.board;
+package com.github.cc3002.citricjuice.model.board;
 
 import org.junit.jupiter.api.Test;
 
@@ -10,6 +10,24 @@ class PanelNeutralTest extends AbstractTestPanel {
     public void setTestPanel() {
         testPanel = new PanelNeutral(0);
         expectedPanelType = PanelType.NEUTRAL;
+    }
+
+    @Override
+    @Test
+    public void setAndGetPlayersTest() {
+        super.setAndGetPlayersTest();
+    }
+
+    @Test
+    @Override
+    public void searchTest(){
+        super.searchTest();
+    }
+
+    @Test
+    @Override
+    public void nextPanelTest(){
+        super.nextPanelTest();
     }
 
     @Override

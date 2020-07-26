@@ -1,6 +1,6 @@
-package java.com.github.cc3002.citricjuice.model.units;
+package com.github.cc3002.citricjuice.model.units;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
 

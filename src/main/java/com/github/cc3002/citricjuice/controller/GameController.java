@@ -1,10 +1,10 @@
-package java.com.github.cc3002.citricjuice.controller;
+package com.github.cc3002.citricjuice.controller;
 
-import java.com.github.cc3002.citricjuice.model.NormaGoal;
-import java.com.github.cc3002.citricjuice.model.board.*;
-import java.com.github.cc3002.citricjuice.model.units.Boss;
-import java.com.github.cc3002.citricjuice.model.units.Player;
-import java.com.github.cc3002.citricjuice.model.units.Wild;
+import com.github.cc3002.citricjuice.model.NormaGoal;
+import com.github.cc3002.citricjuice.model.board.*;
+import com.github.cc3002.citricjuice.model.units.Boss;
+import com.github.cc3002.citricjuice.model.units.Player;
+import com.github.cc3002.citricjuice.model.units.Wild;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,10 +13,14 @@ public class GameController {
     private final List<IPanel> panels = new ArrayList<>();
     private final List<Player> players = new ArrayList<>();
     private Player currentPlayer;
-    private Player winner;
+    private List<Player> winner = new ArrayList<>();
     private int chapter;
     private TooCrowdedSpot tooCrowded = new TooCrowdedSpot(this);
     private boolean isTooCrowded = false;
+    private int lastDice = 0;
+    private int playerChoice = 3;
+    private int movesLeft = 0;
+    private String state = "Roll to Move";
 
     public GameController(){
         this.chapter = 1;
@@ -28,6 +32,7 @@ public class GameController {
      * the a player finds its own homePanel.
      */
     public void spotTooCrowded(){
+        System.out.println("workOut?");
         isTooCrowded = true;
     }
 
@@ -156,7 +161,7 @@ public class GameController {
      */
     public void recoveryPhase(){
         if (currentPlayer.recovery()){
-            endTurn();
+            state = "You are in Recovery, End Your Turn";
         } else {
             currentPlayer.setCurrentHP(currentPlayer.getMaxHP());
             initPhase();
@@ -168,6 +173,7 @@ public class GameController {
      */
     public void movePlayer() {
         int moves = currentPlayer.roll();
+        lastDice = moves;
         moveNextPanel(currentPlayer, moves);
     }
 
@@ -179,29 +185,41 @@ public class GameController {
      */
     public void moveNextPanel(Player player, int counter){
         if (counter == 0){
-            mainPhase();
+            normaPhase(10);
         } else if (isTooCrowded){
-            int decision = decisionPhase();
             isTooCrowded = false;
-            if(decision == 0){
-                moveNextPanel(player, counter);
-            } else {
-                mainPhase();
-            }
+            state = "Fight or Keep Moving?";
+            movesLeft = counter;
         } else {
             IPanel currentPanel = getPlayerPanel(player);
             List<IPanel> nextPanels = List.copyOf(currentPanel.getNextPanels());
             if (nextPanels.size() > 1) {
-                int decision = decisionPhase();
-                IPanel nextPanel = nextPanels.get(decision);
-                currentPanel.popPlayer(player);
-                nextPanel.setPlayer(player);
+                if (playerChoice==3){
+                    movesLeft = counter;
+                    state = "Choose Right or Left";
+                } else {
+                    IPanel nextPanel = nextPanels.get(playerChoice);
+                    currentPanel.popPlayer(player);
+                    nextPanel.setPlayer(player);
+                    playerChoice = 3;
+                    if(nextPanel.getId()==player.getHome_id()){
+                        movesLeft = counter - 1;
+                        state = "Do You Want to Stop?";
+                    } else {
+                        moveNextPanel(player, counter - 1);
+                    }
+                }
             } else {
                 IPanel nextPanel = nextPanels.get(0);
                 currentPanel.popPlayer(player);
                 nextPanel.setPlayer(player);
+                if(nextPanel.getId()==player.getHome_id()){
+                    movesLeft = counter - 1;
+                    state = "Do You Want to Stop?";
+                } else {
+                    moveNextPanel(player, counter - 1);
+                }
             }
-            moveNextPanel(player, counter - 1);
         }
     }
 
@@ -209,37 +227,148 @@ public class GameController {
      * A method that is not useful yet, but represent the decision that has to make
      * the user when is controlling the player.
      */
-    public int decisionPhase(){
-        return 0;
+    public void decisionPhase(int choice){
+        playerChoice = choice;
+        moveNextPanel(currentPlayer, movesLeft);
     }
 
     /**
-     * After the player's move, this phase is in charge of what happen in the current panel.
-     * The user can decided if will attack another player in the same spot, or if the player
-     * could increase it normaLevel.
+     * This phase is next to the movement of the current player.
+     * Checks if the player has reach the norma goal to get to the next norma and
+     * allows to choose the next norma goal after a norma clear.
      */
-    public void mainPhase(){
-        IPanel currentPanel = getPlayerPanel(currentPlayer);
-        if ((currentPanel.getId() == currentPlayer.getHome_id()) && normaCheck(currentPlayer)){
-            currentPlayer.normaClear();
-            if (currentPlayer.getNormaLevel() > 5){
-                winner = currentPlayer;
-            }
-            int decision = decisionPhase();
-            if (decision == 0){
-                currentPlayer.setNormaGoal(NormaGoal.STARS);
+    public void normaPhase(int decision){
+        if (decision==0){
+            currentPlayer.setNormaGoal(NormaGoal.STARS);
+            fightPhase(10);
+        } else if (decision==1){
+            currentPlayer.setNormaGoal(NormaGoal.WINS);
+            fightPhase(10);
+        } else {
+            IPanel currentPanel = getPlayerPanel(currentPlayer);
+            if ((currentPanel.getId() == currentPlayer.getHome_id()) && normaCheck(currentPlayer)){
+                currentPlayer.normaClear();
+                state = "Choose NormaGoal";
+                if (currentPlayer.getNormaLevel() > 5){
+                    winner.add(currentPlayer);
+
+                }
             } else {
-                currentPlayer.setNormaGoal(NormaGoal.WINS);
+                fightPhase(10);
             }
         }
-        if (currentPanel.getPlayers().size() > 1){
-            int decision = decisionPhase();
-            if (decision == 0){
-                currentPlayer.attack(currentPanel.getPlayers().get(0));
+    }
+
+    /**
+     * This method gets triggered when the current player start a battle against another
+     * player or an Enemy unit (Wild or Boss).
+     */
+    public void fightPhase(int decision){
+        IPanel currentPanel = getPlayerPanel(currentPlayer);
+        if (decision==0){
+            activationPhase();
+        } else if (decision==1){
+            state = "Opponent Choose Avoid or Defend";
+        } else {
+            if (currentPanel.getPlayers().size() > 1){
+                isTooCrowded = false;
+                state = "Do You Want to Fight?";
+            } else {
+                activationPhase();
             }
         }
+    }
+
+    /**
+     * When a Player vs Player battle start, this method allows to the Opponent to
+     * choose if it wants to avoid o defend the incoming attack (form the current player).
+     */
+    public void fightPvp1(int decision){
+        Player player2 = getPlayerPanel(currentPlayer).getPlayers().get(0);
+        int damage = currentPlayer.attackDamage();
+        if(decision==0){
+            player2.avoid(damage);
+        } else {
+            player2.defend(damage);
+        }
+        if(player2.getCurrentHP()>0){
+            state = "CurrentPlayer Choose Avoid or Defend";
+        } else {
+            List<Integer> data = player2.defeatedByPlayer();
+            currentPlayer.increaseStarsBy(data.get(0));
+            currentPlayer.increaseWinsBy(data.get(1));
+            activationPhase();
+        }
+    }
+
+    /**
+     * If the opponent survives the current player attack, it attack back. This method
+     * allows to the current player to avoid or defend the incoming attack.
+     */
+    public void fightPvp2(int decision){
+        Player player2 = getPlayerPanel(currentPlayer).getPlayers().get(0);
+        int damage = player2.attackDamage();
+        if(decision==0){
+            currentPlayer.avoid(damage);
+        } else {
+            currentPlayer.defend(damage);
+        }
+        if (currentPlayer.getCurrentHP()>0){
+            activationPhase();
+        } else {
+            List<Integer> data = currentPlayer.defeatedByPlayer();
+            player2.increaseWinsBy(data.get(0));
+            player2.increaseWinsBy(data.get(1));
+            state = "End Your Turn";
+        }
+    }
+
+    /**
+     * This is the last phase before the player's end turn. Trigger the effect of the
+     * panel under the current player.
+     */
+    public void activationPhase(){
+        IPanel currentPanel = getPlayerPanel(currentPlayer);
         currentPanel.activatedBy(currentPlayer);
-        endTurn();
+        if (currentPanel.getEnemyAlive()!=null){
+            state = "Choose Avoid or Defend";
+        } else {
+            state = "End Your Turn";
+        }
+    }
+
+    /**
+     * This method is in charge of make the current player defend an incoming attack.
+     */
+    public void defendAttack(){
+        IPanel currentPanel = getPlayerPanel(currentPlayer);
+        currentPlayer.defend(currentPanel.getEnemyAlive().attackDamage());
+        currentPanel.setEnemyAlive(null);
+        state = "End Your Turn";
+    }
+
+    /**
+     * This method is in charge of make the current player avoid an incoming attack.
+     */
+    public void avoidAttack(){
+        IPanel currentPanel = getPlayerPanel(currentPlayer);
+        currentPlayer.avoid(currentPanel.getEnemyAlive().attackDamage());
+        currentPanel.setEnemyAlive(null);
+        state = "End Your Turn";
+    }
+
+    /**
+     * This method it causes the current player stop his movement.
+     */
+    public void stopMove(){
+        normaPhase(10);
+    }
+
+    /**
+     * This method allows the current player to don't stop his movement.
+     */
+    public void dontStopMove(){
+        moveNextPanel(currentPlayer, movesLeft);
     }
 
     /**
@@ -337,7 +466,7 @@ public class GameController {
     /**
      * Return the winner of the game. If no player win already, return null.
      */
-    public Player getWinner(){
+    public List<Player> getWinner(){
         return winner;
     }
 
@@ -354,5 +483,107 @@ public class GameController {
         } else {
             currentPlayer = players.get(currPlayerIndex + 1);
         }
+        state = "Roll to Move";
+    }
+
+    /**
+     * This method sets the field that will be use in the Graphic Interface implemented
+     * in the CitricLiquidFX.
+     */
+    public void setField(){
+        IPanel homePanel0 = createHomePanel(0);
+        IPanel homePanel1 = createHomePanel(1);
+        IPanel homePanel2 = createHomePanel(2);
+        IPanel homePanel3 = createHomePanel(3);
+        createPlayer("Player1", 5, 2, 1, 1, homePanel0);
+        createPlayer("Player2", 5, 2, 1, 1, homePanel1);
+        createPlayer("Player3", 5, 2, 1, 1, homePanel2);
+        createPlayer("Player4", 5, 2, 1, 1, homePanel3);
+        currentPlayer = players.get(0);
+        IPanel neutralPanel4 = createNeutralPanel(4);
+        IPanel neutralPanel5 = createNeutralPanel(5);
+        IPanel neutralPanel6 = createNeutralPanel(6);
+        IPanel neutralPanel7 = createNeutralPanel(7);
+        IPanel neutralPanel8 = createNeutralPanel(8);
+        IPanel neutralPanel9 = createNeutralPanel(9);
+        IPanel neutralPanel10 = createNeutralPanel(10);
+        IPanel neutralPanel11 = createNeutralPanel(11);
+        IPanel neutralPanel12 = createNeutralPanel(12);
+        IPanel neutralPanel13 = createNeutralPanel(13);
+        IPanel neutralPanel14 = createNeutralPanel(14);
+        IPanel neutralPanel15 = createNeutralPanel(15);
+        IPanel neutralPanel16 = createNeutralPanel(16);
+        IPanel neutralPanel17 = createNeutralPanel(17);
+        IPanel neutralPanel18 = createNeutralPanel(18);
+        IPanel neutralPanel19 = createNeutralPanel(19);
+        IPanel wildPanel20 = createEncounterPanel(20);
+        IPanel wildPanel21 = createEncounterPanel(21);
+        IPanel wildPanel22 = createEncounterPanel(22);
+        IPanel wildPanel23 = createEncounterPanel(23);
+        IPanel bossPanel24 = createBossPanel(24);
+        IPanel bossPanel25 = createBossPanel(25);
+        IPanel bonusPanel26 = createBonusPanel(26);
+        IPanel bonusPanel27 = createBonusPanel(27);
+        IPanel bonusPanel28 = createBonusPanel(28);
+        IPanel bonusPanel29 = createBonusPanel(29);
+        IPanel dropPanel30 = createDropPanel(30);
+        IPanel dropPanel31 = createDropPanel(31);
+        IPanel dropPanel32 = createDropPanel(32);
+        IPanel dropPanel33 = createDropPanel(33);
+
+        homePanel0.addNextPanel(neutralPanel4);
+        neutralPanel4.addNextPanel(neutralPanel5);
+        neutralPanel5.addNextPanel(wildPanel20);
+        wildPanel20.addNextPanel(dropPanel30);
+        dropPanel30.addNextPanel(bonusPanel26);
+        bonusPanel26.addNextPanel(neutralPanel6);
+        neutralPanel6.addNextPanel(homePanel1);
+        homePanel1.addNextPanel(neutralPanel7);
+        neutralPanel7.addNextPanel(neutralPanel8);
+        neutralPanel8.addNextPanel(wildPanel21);
+        wildPanel21.addNextPanel(dropPanel31);
+        dropPanel31.addNextPanel(bonusPanel27);
+
+        bonusPanel27.addNextPanel(neutralPanel9);
+        neutralPanel9.addNextPanel(homePanel2);
+        homePanel2.addNextPanel(neutralPanel10);
+        neutralPanel10.addNextPanel(neutralPanel11);
+        bonusPanel27.addNextPanel(neutralPanel12);
+        neutralPanel12.addNextPanel(bossPanel24);
+        bossPanel24.addNextPanel(neutralPanel13);
+        neutralPanel13.addNextPanel(neutralPanel11);
+
+        neutralPanel11.addNextPanel(wildPanel22);
+        wildPanel22.addNextPanel(dropPanel32);
+        dropPanel32.addNextPanel(bonusPanel28);
+        bonusPanel28.addNextPanel(neutralPanel14);
+        neutralPanel14.addNextPanel(homePanel3);
+        homePanel3.addNextPanel(neutralPanel15);
+        neutralPanel15.addNextPanel(neutralPanel16);
+        neutralPanel16.addNextPanel(wildPanel23);
+        wildPanel23.addNextPanel(dropPanel33);
+        dropPanel33.addNextPanel(bonusPanel29);
+
+        bonusPanel29.addNextPanel(neutralPanel17);
+        neutralPanel17.addNextPanel(homePanel0);
+        bonusPanel29.addNextPanel(neutralPanel18);
+        neutralPanel18.addNextPanel(bossPanel25);
+        bossPanel25.addNextPanel(neutralPanel19);
+        neutralPanel19.addNextPanel(neutralPanel5);
+    }
+
+    /**
+     * This method return the last dice played by the current pLayer.
+     */
+    public int getDice() {
+        return lastDice;
+    }
+
+    /**
+     * This method return the current state fo the game, which is used in the
+     * implementation of the Graphic Interface.
+     */
+    public String getState(){
+        return state;
     }
 }

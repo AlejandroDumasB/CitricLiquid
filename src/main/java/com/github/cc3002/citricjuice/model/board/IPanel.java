@@ -1,9 +1,8 @@
-package java.com.github.cc3002.citricjuice.model.board;
+package com.github.cc3002.citricjuice.model.board;
 
 import java.beans.PropertyChangeListener;
-import java.com.github.cc3002.citricjuice.model.units.Boss;
-import java.com.github.cc3002.citricjuice.model.units.IUnit;
-import java.com.github.cc3002.citricjuice.model.units.Player;
+import com.github.cc3002.citricjuice.model.units.IUnit;
+import com.github.cc3002.citricjuice.model.units.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -43,4 +42,8 @@ public interface IPanel{
     IUnit getEnemy(int i);
 
     void addTooCrowdedListener(PropertyChangeListener listener);
+
+    IUnit getEnemyAlive();
+
+    void setEnemyAlive(IUnit enemy);
 }

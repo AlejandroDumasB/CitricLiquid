@@ -1,13 +1,15 @@
-package java.com.github.cc3002.citricjuice.controller;
+package com.github.cc3002.citricjuice.controller;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 
-import java.com.github.cc3002.citricjuice.model.NormaGoal;
-import java.com.github.cc3002.citricjuice.model.board.IPanel;
-import java.com.github.cc3002.citricjuice.model.units.*;
+import com.github.cc3002.citricjuice.model.NormaGoal;
+import com.github.cc3002.citricjuice.model.board.IPanel;
+import com.github.cc3002.citricjuice.model.units.*;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -79,7 +81,7 @@ public class GameControllerTest {
     @Test
     public void nextPanelTest(){
         IPanel panelTest = gameController.getPanels().get(0);
-        assertEquals(List.copyOf(panelTest.getNextPanels()).get(0), gameController.getPanels().get(4));
+        assertEquals(List.copyOf(panelTest.getNextPanels()).get(0), gameController.getPanels().get(9));
     }
 
     @Test
@@ -116,14 +118,78 @@ public class GameControllerTest {
 
     @Test
     public void turnTest(){
-        gameController.initPhase();
-        assertEquals(gameController.getPlayers().get(1), gameController.getTurnOwner());
-        gameController.initPhase();
-        assertEquals(gameController.getPlayers().get(2), gameController.getTurnOwner());
-        gameController.initPhase();
-        assertEquals(gameController.getPlayers().get(3), gameController.getTurnOwner());
-        gameController.initPhase();
         assertEquals(gameController.getPlayers().get(0), gameController.getTurnOwner());
+        gameController.endTurn();
+        assertEquals(gameController.getPlayers().get(1), gameController.getTurnOwner());
+        gameController.endTurn();
+        assertEquals(gameController.getPlayers().get(2), gameController.getTurnOwner());
+        gameController.endTurn();
+        assertEquals(gameController.getPlayers().get(3), gameController.getTurnOwner());
+        gameController.endTurn();
         assertEquals(2, gameController.getChapter());
+    }
+
+    @Test
+    public void setNextPanelTest(){
+        IPanel panelTest = gameController.createNeutralPanel(13);
+        gameController.setNextPanel(gameController.getPanels().get(0),panelTest);
+        assertEquals(Set.of(gameController.getPanels().get(9),panelTest),
+                gameController.getPanels().get(0).getNextPanels());
+    }
+
+    @Test
+    public void simpleSetUpTest(){
+        GameController controllerTest = new GameController();
+        IPanel homeTest = controllerTest.createHomePanel(0);
+        controllerTest.createPlayer("test",10,1,1,1,homeTest);
+        controllerTest.setCurrentPlayer(controllerTest.getPlayers().get(0));
+        IPanel panelTest1 = controllerTest.createNeutralPanel(1);
+        IPanel panelTest2 = controllerTest.createNeutralPanel(2);
+        IPanel panelTest3 = controllerTest.createNeutralPanel(3);
+        IPanel panelTest4 = controllerTest.createNeutralPanel(4);
+        IPanel panelTest5 = controllerTest.createNeutralPanel(5);
+        IPanel panelTest6 = controllerTest.createNeutralPanel(6);
+        homeTest.addNextPanel(panelTest1);
+        panelTest1.addNextPanel(panelTest2);
+        panelTest2.addNextPanel(panelTest3);
+        panelTest3.addNextPanel(panelTest4);
+        panelTest4.addNextPanel(panelTest5);
+        panelTest5.addNextPanel(panelTest6);
+        controllerTest.getTurnOwner().setCurrentHP(0);
+        while(homeTest.getPlayers().size()>0){
+            controllerTest.initPhase();
+        }
+        assertEquals(0,homeTest.getPlayers().size());
+    }
+
+    @Test
+    public void twoPathsTest(){
+        gameController.endTurn();
+        gameController.endTurn();
+        gameController.moveNextPanel(gameController.getTurnOwner(), 2);
+        gameController.decisionPhase(0);
+        assertEquals(gameController.getPanels().get(6),
+                gameController.getPlayerPanel(gameController.getTurnOwner()));
+    }
+
+    @Test
+    public void handlerTest(){
+        gameController.moveNextPanel(gameController.getTurnOwner(),4);
+        assertEquals("Fight or Keep Moving?",gameController.getState());
+        gameController.fightPhase(1);
+        assertEquals("Opponent Choose Avoid or Defend",gameController.getState());
+        gameController.fightPvp1(1);
+        assertTrue(gameController.getPlayers().get(1).getCurrentHP()<100);
+        assertEquals("CurrentPlayer Choose Avoid or Defend",gameController.getState());
+        gameController.fightPvp2(1);
+        assertEquals("End Your Turn",gameController.getState());
+    }
+
+    @Test
+    public void setFieldTest(){
+        GameController controllerTest = new GameController();
+        controllerTest.setField();
+        controllerTest.initPhase();
+        assertNotEquals(0,controllerTest.getDice());
     }
 }

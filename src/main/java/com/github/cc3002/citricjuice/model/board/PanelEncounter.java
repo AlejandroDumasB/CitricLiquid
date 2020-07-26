@@ -1,8 +1,10 @@
-package java.com.github.cc3002.citricjuice.model.board;
+package com.github.cc3002.citricjuice.model.board;
 
-import java.com.github.cc3002.citricjuice.model.units.IUnit;
-import java.com.github.cc3002.citricjuice.model.units.Player;
-import java.com.github.cc3002.citricjuice.model.units.Wild;
+import com.github.cc3002.citricjuice.model.units.IUnit;
+import com.github.cc3002.citricjuice.model.units.Player;
+import com.github.cc3002.citricjuice.model.units.Wild;
+
+import java.util.List;
 
 public class PanelEncounter extends AbstractPanel{
     private final Wild enemy1 = new Wild("Chicken", 3, -1, -1, 1);
@@ -21,13 +23,34 @@ public class PanelEncounter extends AbstractPanel{
     public void activatedBy(Player player) {
         int choose = player.roll();
         if (choose < 3) {
-            player.attack(enemy1);
+            enemy1.receiveAttack(player.attackDamage());
+            if (enemy1.getCurrentHP()>0){
+                enemyAlive = enemy1;
+            } else {
+                List<Integer> data = enemy1.defeatedByPlayer();
+                player.increaseStarsBy(data.get(0));
+                player.increaseWinsBy(data.get(1));
+            }
             enemy1.setCurrentHP(enemy1.getMaxHP());
         } else if (choose > 4) {
-            player.attack(enemy3);
+            enemy3.receiveAttack(player.attackDamage());
+            if (enemy3.getCurrentHP()>0){
+                enemyAlive = enemy3;
+            } else {
+                List<Integer> data = enemy3.defeatedByPlayer();
+                player.increaseStarsBy(data.get(0));
+                player.increaseWinsBy(data.get(1));
+            }
             enemy3.setCurrentHP(enemy3.getMaxHP());
         } else {
-            player.attack(enemy2);
+            enemy2.receiveAttack(player.attackDamage());
+            if (enemy2.getCurrentHP()>0){
+                enemyAlive = enemy2;
+            } else {
+                List<Integer> data = enemy2.defeatedByPlayer();
+                player.increaseStarsBy(data.get(0));
+                player.increaseWinsBy(data.get(1));
+            }
             enemy2.setCurrentHP(enemy2.getMaxHP());
         }
     }

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.github.cc3002.citricjuice.controller.GameControllerTest" tests="14" skipped="0" failures="0" errors="0" timestamp="2020-07-26T00:09:52" hostname="DuWaZ" time="0.221">
+  <properties/>
+  <testcase name="setFieldTest()" classname="com.github.cc3002.citricjuice.controller.GameControllerTest" time="0.11"/>
+  <testcase name="setPlayerNormaGoalTest()" classname="com.github.cc3002.citricjuice.controller.GameControllerTest" time="0.007"/>
+  <testcase name="simpleSetUpTest()" classname="com.github.cc3002.citricjuice.controller.GameControllerTest" time="0.002"/>
+  <testcase name="createPlayerTest()" classname="com.github.cc3002.citricjuice.controller.GameControllerTest" time="0.001"/>
+  <testcase name="twoPathsTest()" classname="com.github.cc3002.citricjuice.controller.GameControllerTest" time="0.003"/>
+  <testcase name="turnTest()" classname="com.github.cc3002.citricjuice.controller.GameControllerTest" time="0.001"/>
+  <testcase name="normaTest()" classname="com.github.cc3002.citricjuice.controller.GameControllerTest" time="0.001"/>
+  <testcase name="nextPanelTest()" classname="com.github.cc3002.citricjuice.controller.GameControllerTest" time="0.001"/>
+  <testcase name="createNonPlayerTest()" classname="com.github.cc3002.citricjuice.controller.GameControllerTest" time="0.002"/>
+  <testcase name="playerPanelTest()" classname="com.github.cc3002.citricjuice.controller.GameControllerTest" time="0.001"/>
+  <testcase name="createPanelTest()" classname="com.github.cc3002.citricjuice.controller.GameControllerTest" time="0.003"/>
+  <testcase name="handlerTest()" classname="com.github.cc3002.citricjuice.controller.GameControllerTest" time="0.027"/>
+  <testcase name="normaCheckTest()" classname="com.github.cc3002.citricjuice.controller.GameControllerTest" time="0.004"/>
+  <testcase name="setNextPanelTest()" classname="com.github.cc3002.citricjuice.controller.GameControllerTest" time="0.001"/>
+  <system-out><![CDATA[workOut?
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

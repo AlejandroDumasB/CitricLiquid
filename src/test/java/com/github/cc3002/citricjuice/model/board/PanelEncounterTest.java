@@ -1,6 +1,7 @@
-package java.com.github.cc3002.citricjuice.model.board;
+package com.github.cc3002.citricjuice.model.board;
 
 import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -10,6 +11,24 @@ public class PanelEncounterTest extends AbstractTestPanel{
     public void setTestPanel() {
         testPanel = new PanelEncounter(0);
         expectedPanelType = PanelType.ENCOUNTER;
+    }
+
+    @Override
+    @Test
+    public void setAndGetPlayersTest() {
+        super.setAndGetPlayersTest();
+    }
+
+    @Test
+    @Override
+    public void searchTest(){
+        super.searchTest();
+    }
+
+    @Test
+    @Override
+    public void nextPanelTest(){
+        super.nextPanelTest();
     }
 
     @Override
